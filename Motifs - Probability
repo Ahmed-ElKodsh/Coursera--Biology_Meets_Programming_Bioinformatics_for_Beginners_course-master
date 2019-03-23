@@ -1,0 +1,21 @@
+def Pr(Motif, Profile):
+    # Motif Finding Problem:  Given a collection of strings, find a set of k - mers, one from each string, that minimizes the score of the
+    # resulting
+    # Input: A collection of strings Dna and an integer k
+    # Output: A collection Motifs of k-mers, one from each string in Dna, minimizing Score(Motifs) amon
+    pr = 1
+    for i in range(len(Motif)):
+        symbol = Motif[i]
+        pr *= Profile[symbol][i]
+        if pr == 0:
+            return 0
+    return pr
+
+# Profile = {
+#   'A': [0.4, 0.3, 0.0, 0.1, 0.0, 0.9],
+#   'C': [0.2, 0.3, 0.0, 0.4, 0.0, 0.1],
+#   'G': [0.1, 0.3, 1.0, 0.1, 0.5, 0.0],
+#   'T': [0.3, 0.1, 0.0, 0.4, 0.5, 0.0]
+# }
+#
+# print(Pr("AAGTTC", Profile))

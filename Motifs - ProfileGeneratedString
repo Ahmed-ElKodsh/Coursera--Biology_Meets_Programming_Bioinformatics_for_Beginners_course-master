@@ -1,0 +1,8 @@
+def ProfileGeneratedString(Text, profile, k):
+    """ return a randomly generated k-mer from Text whose probabilities are generated from profile"""
+    n = len(Text)
+    probabilities = {}
+    for i in range(0, n - k + 1):
+        probabilities[Text[i:i + k]] = Pr(Text[i:i + k], profile)
+    probabilities = Normalize(probabilities)
+    return WeightedDie(probabilities)

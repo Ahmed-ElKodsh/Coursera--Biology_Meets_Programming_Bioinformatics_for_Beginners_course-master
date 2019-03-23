@@ -1,0 +1,245 @@
+"""
+Where in the Genome Does DNA Replication Begin?
+Finding Origin of replication (ori), as the most frequent pattern in Genome string
+"""
+
+def PatternCount(Pattern, Text):
+    """Count Pattern frequency throughout Text"""
+    count = 0
+    for i in range(len(Text) - len(Pattern) + 1):
+        if Pattern == Text[i: i + len(Pattern)]:
+            count += 1
+    return count
+
+# print(PatternCount("CGCG", "CGCGATACGTTACATACATGATAGACCGCGCGCGATCATATCGCGATTATC"))
+
+
+# To count the Pattern and its complement
+def matchingStrand(Text):
+    # By including our matching strand function we can check for both patterns at the same time
+    # ... instead of running the code twice and adding the outputs.
+    key = str.maketrans('ATCG','TAGC')
+    return Text.translate(key)
+
+
+def PatternCountWithMatchingStrand(Pattern, Text):
+  count = 0
+  for i in range(len(Text) - len(Pattern) + 1):
+    if Pattern == Text[i:i+len(Pattern)] or matchingStrand(Text) == Text[i:i+len(Pattern)]:
+      count += 1
+  return count
+
+
+def CountDict(Text, k):
+    """Assign each Pattern to its count"""
+    count = {}
+    for i in range(len(Text) - k + 1):
+        Pattern = Text[i: i + k]
+        count[i] = PatternCount(Pattern, Text)
+    return count
+
+
+def max(list):
+    """Finding the max value in a list"""
+    m = 0
+    for elm in list:
+        if elm > m:
+            m = elm
+    return m
+
+
+def remove_duplicates(Items):
+    # Input:  A list Items
+    # Output: A list containing all objects from Items without duplicates
+    ItemsNoDuplicates = []  # output variable
+    for item in Items:
+        if item not in ItemsNoDuplicates:
+            ItemsNoDuplicates.append(item)
+    return ItemsNoDuplicates
+
+
+def FrequentWords(Text, k):
+    # Input:  A string Text and an integer k
+    # Output: A list containing all most frequent k-mers in Text
+    FrequentPatterns = []
+    Count = CountDict(Text, k)
+    m = max(Count.values())
+    for i in Count:
+        if Count[i] == m:
+            FrequentPatterns.append(Text[i: i + k])
+    FrequentPatternsNoDuplicates = remove_duplicates(FrequentPatterns)
+    return FrequentPatternsNoDuplicates
+    # or
+    # PatternWithMaxCount = [max(Count.items(), key=lambda Count:Count[1])]
+    # print(PatternWithMaxCount)
+
+
+def FrequentWords_3InOne(Text, k):
+    # create empty dict to hold kmers
+    kmers = dict()
+    # create empty list to hold most frequent patterns
+    highest_count_Patterns = []
+    # variable to hold highest count
+    highest_count = 0
+
+    for i in range(len(Text) - k + 1):
+        # if kmer already in dict, skip it
+        if Text[i: i + k] in kmers:
+            continue
+
+        # if kmer isn't in dict, run PatternCount
+        else:
+            kmers[Text[i: i + k]] = PatternCount(Text[i: i + k], Text)
+
+            # if this Kmer has highest Count, add to the most_freq list
+            if kmers[Text[i: i + k]] == highest_count:
+                highest_count_Patterns.append(Text[i: i + k])
+
+            # if kmer has highest count over the previous
+            # ... use to remove, replace all previous in highest_count list
+            # ... replace old highest value with the new value
+            elif kmers[Text[i: i + k]] > highest_count:
+                highest_count_Patterns = [Text[i: i + k]]
+                highest_count = kmers[Text[i: i + k]]
+
+    return highest_count_Patterns  # prints list of highest-count kmers
+
+# Text = 'ACGTTGCATGTCGCATGATGCATGAGAGCT'
+# k = 4
+# print(FrequentWords('CGGAGGACTCTAGGTAACGCTTATCAGGTCCATAGGACATTCA', 3))
+
+
+def ReverseComplement(Pattern):
+    revComp = ''  # output variable
+    complementNuc = str.maketrans('ATCG','TAGC')
+    for i in Pattern.translate(complementNuc):
+        revComp = i + revComp
+    return revComp
+
+    #or
+    # complementNuc = {'A': 'T', 'T': 'A', 'G': 'C', 'C': 'G'}
+    # for char in Pattern:
+    #     revComp = complementNuc[char] + revComp
+    # return revComp
+    # or
+    # return ''.join([complementNuc[x] for x in Pattern[::-1]])
+
+    # or
+    # complement_list = []
+    # for char in Pattern:
+    #     complement_list.append(complementNuc[char])
+    # return ''.join(reversed(complement_list))
+
+# print('ReverseComplement:',ReverseComplement('GCTAGCT'))
+
+
+def PatternMatching(Pattern, Genome):
+    # Input:  Two strings, Pattern and Genome
+    # Output: A list containing all starting positions where Pattern appears as a substring of Genome
+    positions = []  # output variable
+    for index in range(len(Genome) - len(Pattern)+ 1):
+        if Pattern == Genome[index: index + len(Pattern)]:
+            positions.append(index)
+    return positions
+
+# print(PatternMatching('ATAT', 'GATATATGCATATACTT'))
+
+
+def SymbolArray(Genome, Symbol):
+    array = {}
+    n = len(Genome)
+    ExtentedGenome = Genome + Genome[0: n//2]
+    for i in range(n):
+        array[i] = PatternCount(Symbol, ExtentedGenome[i: i+(n//2)])
+    return array
+
+
+def FasterSymbolArray(Genome, Symbol):
+    array = {}
+    n = len(Genome)
+    ExtendedGenome = Genome + Genome[0: n//2]
+    # slide a Pattern of large window of half the Genome
+    # ... only calculate the 0-th element
+    array[0] = PatternCount(Symbol, ExtendedGenome[0: n//2])
+    for i in range(1, n):
+        # avoid re-sliding form the start
+        # ... build every element on the previous
+        array[i] = array[i-1]
+        # if missed element [i-1] was Symbol, dec value by the 1 (equalling the missed element)
+        if ExtendedGenome[i-1] == Symbol:
+            array[i] -= 1
+        # if last element [i+(n//2)-1] in the new window is a Symbol, add 1
+        if ExtendedGenome[i+(n//2)-1] == Symbol:
+            array[i] += 1
+    return array
+
+
+def Skew(Genome):
+    Skew = {}
+    n = len(Genome)
+    #ExtendedGenome = Genome + Genome[0: n//2]
+    Skew[0] = 0
+    for i in range(1, n+1):
+        Skew[i] = Skew[i-1]
+        # equal for both Genome & ExtendedGenome cases
+        #if ExtendedGenome[i-1] == 'C':
+        if Genome[i-1] == 'C':
+            Skew[i] -= 1
+        #elif ExtendedGenome[i-1] == 'G':
+        if Genome[i-1] == 'G':
+            Skew[i] += 1
+
+    return Skew
+
+# print()
+# print(Skew('CATGGGCATCGGCCATACGCC'))
+
+
+def MinimumSkew(Genome):
+    # Input:  A DNA string Genome
+    # Output: A list containing all integers i minimizing Skew(Prefix_i(Text)) over all values of i (from 0 to |Genome|)
+    skewArray = Skew(Genome)
+    minimum = min(skewArray.values())
+    return [position for position, value in skewArray.items() if value == minimum]
+
+# print()
+# print(MinimumSkew("GATACACTTCCCGAGTAGGTACTG"))
+
+
+def HammingDistance(p, q):
+    # Input:  Two strings p and q
+    # Output: An integer value representing the Hamming Distance between p and q.
+    assert len(p) == len(q)
+    return sum(elm1 != elm2 for elm1, elm2 in zip(p,q))
+    # count = 0
+    # for elm1, elm2 in zip(p, q):
+    #     if elm1 != elm2:
+    #         count += 1
+    # return count
+
+# print(HammingDistance("TGACCCGTTATGCTCGAGTTCGGTCAGAGCGTCATTGCGAGTAGTCGTTTGCTTTCTCAAACTCC","GAGCGATTAAGCGTGACAGCCCCAGGGAACCCACAAAACGTGATCGCAGTCCATCCGATCATACA"))
+
+
+def ApproximatePatternMatching(Pattern, Text, d):
+    # Input:  Strings Pattern and Text along with an integer d
+    # Output: A list containing all starting positions where Pattern appears as a substring of Text with at most d mismatche
+    return [i for i in range(len(Text) - len(Pattern) + 1) if HammingDistance(Pattern, Text[i: i+(len(Pattern))]) <= d]
+    # positions = []
+    # for i in range(len(Text) - len(Pattern) + 1):
+    #     if HammingDistance(Pattern, Text[i: i+(len(Pattern))]) <= d:
+    #         positions.append(i)
+    # return positions
+
+# print(ApproximatePatternMatching('ATTCTGGA','CGCCCGAATCCAGAACGCATTCCCATATTTCGGGACCACTGGCCTCCACGGTACGGACGTCAATCAAAT', 3))
+
+
+def ApproximatePatternCount(Pattern, Text, d):
+    # Input:  Strings Pattern and Text, and an integer d
+    # Output: The number of times Pattern appears in Text with at most d mismatches
+    return len(ApproximatePatternMatching(Pattern, Text, d))
+    # count = 0
+    # for i in range(len(Text) - len(Pattern) + 1):
+    #     if HammingDistance(Pattern, Text[i: i+(len(Pattern))]) <= d:
+    #         count += 1
+    # return count
+

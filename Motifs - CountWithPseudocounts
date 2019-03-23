@@ -1,0 +1,22 @@
+def CountWithPseudocounts(Motifs):
+    # Input: takes a list of strings Motifs as input
+    # Output: returns the count matrix of Motifs with pseudocounts as a dictionary of lists
+    count = {}
+    row = len(Motifs)
+    col = len(Motifs[0])
+    
+    for symbol in 'ACGT':
+        count[symbol] = []
+    for i in range(len(Motifs[0])):
+        col = [col[i] for col in Motifs]
+        for symbol in 'ACGT':
+            count[symbol] += [col.count(symbol) + 1]
+    return count
+    
+    # for symbol in 'ACGT':
+    #     count[symbol] = [1] * col
+    # for i in range(row):
+    #     for j in range(col):
+    #         symbol = Motifs[i][j]
+    #         count[symbol][j] += 1
+    # return count

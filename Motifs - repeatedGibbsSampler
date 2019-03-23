@@ -1,0 +1,7 @@
+def repeatedGibbsSampler(Dna, k, N, R):
+    BestMotifs = RandomMotifs(Dna, k, t)
+    for i in range(R):
+        motifs = GibbsSampler(Dna, k, t, N)
+        if Score(motifs) < Score(BestMotifs):
+            BestMotifs = motifs
+    return BestMotifs

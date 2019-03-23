@@ -1,0 +1,25 @@
+def Score(Motifs):
+    consensus = Consensus(Motifs)
+    score = 0
+
+    row = len(Motifs)
+    col = len(Motifs[0])
+    for i in range(row):
+        for j in range(col):
+            if Motifs[i][j] != consensus[j]:
+                score += 1
+                # or
+                # symbol = consensus[i]
+                # score += len(Motifs) - Count[symbol][i]
+    return score
+    count = CountWithPseudocounts(Motifs)
+    consensus = Consensus(Motifs)
+    score = 0
+    for i in range(len(consensus)):
+        score += len(Motifs) - count[consensus[i]][i]
+    return score
+
+    t = len(Motifs)
+    for i in range(t):
+        score += HammingDistance(consensus, Motifs[i])
+    return score

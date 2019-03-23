@@ -1,0 +1,20 @@
+def GibbsSampler(Dna, k, t, N):
+    """ it is the function that randomly generates a k-mer from some string Text by rolling a weighted die of k-mers weighted by Pr(Profile, kmer).
+    Motif_i is used later because we keep using Motifs. Basically, you repeatedly do the following:
+    -Create a profile from the k-mers in Motifs, excluding the i-th k-mer (aka Motif_i)
+    -Randomly generate a k-mer from i-th sequence in Dna (aka Dna_i) using the profile you created
+    -Use this randomly generated k-mer as the new Motif_i
+    -Repeat"""
+    
+    # ist of Motifs, and the i-th string in Motifs is a Profile-randomly generated k-mer in the i-th string of Dna
+    motifs = RandomMotifs(Dna, k, t)   # randomly select k-mers Motifs = (Motif1, …, Motift) in each string from Dna
+    BestMotifs = motifs
+    for steps in range(N):
+        i = random.randint(0, t-1)    # randomly generated integer between 1 and t
+        # DnaCopyWithDeletion = Dna[:i] + Dna[i + 1:]     # from all strings in Motifs except for Motif[i]
+        # Profile = ProfileWithPseudocounts(DnaCopyWithDeletion)    # Create a profile from the k-mers in Motifs, excluding the i-th k-mer
+        Profile = ProfileWithPseudocounts([motifs[k] for k in range(t) if k != i])
+        motifs[i] = ProfileGeneratedString(Dna[i], Profile, k)   # Randomly generate a k-mer from i-th sequence in Dna using the profile you created
+        if Score(motifs) < Score(BestMotifs):
+            BestMotifs = motifs
+    return BestMotifs

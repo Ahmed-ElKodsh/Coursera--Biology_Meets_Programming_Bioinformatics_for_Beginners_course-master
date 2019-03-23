@@ -1,0 +1,9 @@
+def RandomizedMotifSearch(Dna, k, t):
+    M = RandomMotifs(Dna, k, t) # generating a collection of random motifs
+    BestMotifs = M  # set as the best-scoring collection of motifs.
+    while True:
+        Profile = ProfileWithPseudocounts(M)
+        M = Motifs(Profile, Dna)
+        if Score(M) < Score(BestMotifs):
+            BestMotifs = M
+    return BestMotifs

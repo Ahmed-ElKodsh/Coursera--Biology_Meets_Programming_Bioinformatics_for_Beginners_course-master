@@ -1,0 +1,30 @@
+def Profile(Motifs):
+    # Input:  A list of kmers Motifs
+    # Output: the profile matrix of Motifs, as a dictionary of lists.
+    k = len(Motifs[0])
+    t = len(Motifs)
+    profile = {}
+    for symbol in 'ACGT':
+        profile[symbol] = []
+
+    for i in range(k):
+        col = [col[i] for col in Motifs]
+        for symbol in 'ACGT':
+            profile[symbol] += [col.count(symbol) / t]
+    return profile
+
+    matrix = Count(Motifs)  # instead of repeating steps, get the Count dict matrix
+    for array in matrix.values():  # through each row
+        for i in range(len(array)):  # loop through each col elem
+            array[i] /= t  # change that elem to be its (elem /t
+    return matrix  # return the modified matrix version
+
+    for symbol in 'ACGT':
+        profile[symbol] = []
+        for i in range(len(Motifs[0])):
+            profile[symbol] = [0]
+    for i in range(t):
+        for j in range(k):
+            symbol = Motifs[i][j]
+            profile[symbol][j] += 1 / t
+    return profile

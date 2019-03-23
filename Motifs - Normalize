@@ -1,0 +1,5 @@
+def Normalize(Probabilities):
+    """Divide each value in Probabilities by the sum of all values in  Probabilities, then return the resulting dictionary."""
+    return {k: float(Probabilities[k]) / sum(Probabilities.values()) for k in Probabilities}
+    
+# print(Normalize({'A': 0.1, 'C': 0.1, 'G': 0.1, 'T': 0.1}))

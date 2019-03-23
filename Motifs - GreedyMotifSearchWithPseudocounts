@@ -1,0 +1,22 @@
+def GreedyMotifSearchWithPseudocounts(Dna, k, t):
+    t = len(Dna)
+    BestMotifs = []
+    for i in range(t):  # Take first of each string
+        BestMotifs.append(Dna[i][0: k])
+
+    for i in range(len(Dna[0]) - k + 1):
+        Motifs = []
+        Motifs.append(Dna[0][i: i + k])
+
+        for j in range(1, t):
+            P = ProfileWithPseudocounts(Motifs[0: j])
+            Motifs.append(ProfileMostProbablePattern(Dna[j], k, P))
+
+        if Score(Motifs) < Score(BestMotifs):
+            BestMotifs = Motifs
+
+    return BestMotifs
+
+# Profile = {'A': [0.8, 0.0, 0.0, 0.2], 'C': [0.0, 0.6, 0.2, 0.0], 'G': [0.2, 0.2, 0.8, 0.0], 'T': [0.0, 0.2, 0.0, 0.8]}
+# Dna = ['TTACCTTAAC', 'GATGTCTGTC', 'ACGGCGTTAG', 'CCCTAACGAG', 'CGTCAGAGGT']
+# print(Motifs(Profile, Dna))

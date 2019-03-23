@@ -1,0 +1,7 @@
+def RandomMotifs(Dna, k, t):
+    """uses random.randint to choose a random k-mer from each of t different strings Dna, and returns a list of t strings"""
+    randomMotifs = []
+    for i in range(t):
+        idx = random.randint(1, t)
+        randomMotifs.append(Dna[i][idx: idx+k])
+    return randomMotifs

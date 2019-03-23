@@ -1,0 +1,36 @@
+def Count(Motifs):
+    count = {}
+    # the length first string in Motifs, which is the length of every string in Motifs.
+    k = len(Motifs[0])
+    # for each symbol, give empty list
+    for symbol in 'ACGT':
+        count[symbol] = []
+
+    for i in range(len(Motifs[0])):
+        col = [col[i] for col in Motifs]
+        for symbol in 'ACGT':
+            count[symbol] += [col.count(symbol) + 1]
+    return count
+
+    row = len(Motifs)
+    col = len(Motifs[0])
+    for symbol in 'ACGT':
+        count[symbol] = [0] * col
+    for i in range(row):
+        for j in range(col):
+            count[Motifs[i][j]][j] += 1
+    return count
+
+    # range over all nucleotides symbol and create a list of zeroes corresponding to count[symbol].
+    # for symbol in 'ACGT':
+    #     count[symbol] = []
+    #     for i in range(k):
+    #         print(i)
+    #         count[symbol].append(0)
+    #
+    # t = len(Motifs)
+    # for i in range(t):
+    #     for j in range(k):
+    #         symbol = Motifs[i][j]
+    #         count[symbol][j] += 1
+    # return count

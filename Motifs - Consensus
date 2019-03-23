@@ -1,0 +1,19 @@
+def Consensus(Motifs):
+    k = len(Motifs[0])
+    count = Count(Motifs)
+    consensus = ""
+    for j in range(k):
+        m = 0
+        frequentSymbol = ''
+        for symbol in 'ACGT':
+            if count[symbol][j] > m:
+                m = count[symbol][j]
+                frequentSymbol = symbol
+        consensus += frequentSymbol
+    return consensus
+
+    matrix = Count(Motifs)
+    consensus = ""
+    for i in range(len(Motifs[0])):
+        consensus += max(matrix, key=lambda e: matrix[e][i])
+    return consensus

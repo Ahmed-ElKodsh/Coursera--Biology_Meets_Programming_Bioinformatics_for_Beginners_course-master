@@ -1,0 +1,16 @@
+def ProfileWithPseudocounts(Motifs):
+    profile = {}
+    t = len(Motifs)
+
+    matrix = CountWithPseudocounts(Motifs)  # instead of repeating steps, get the Count dict matrix
+    for array in matrix.values():  # through each row
+        for i in range(len(array)):  # loop through each col elem
+            array[i] /= (t + 4)  # change that elem to be its (elem /t + 1)
+    return matrix  # return the modified matrix version
+
+    profile = CountWithPseudocounts(Motifs)  # make a dictionary to work with
+    for i in 'ACTG':
+        # or for i in profile:
+        for j in range(k):
+            profile[i][j] = profile[i][j] / (t + 4)
+    return profile

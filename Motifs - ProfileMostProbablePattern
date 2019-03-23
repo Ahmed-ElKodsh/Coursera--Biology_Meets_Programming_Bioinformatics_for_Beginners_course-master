@@ -1,0 +1,27 @@
+def ProfileMostProbablePattern(Text, k, Profile):
+    # Input:  String Text, an integer k, and profile matrix Profile
+    # Output: ProfileMostProbablePattern(Text, k, Profile)
+    
+    idx = max(range(len(Text) - k + 1), key=lambda i: Pr(Text[i:i + k], Profile))
+    return Text[idx: idx + k]
+    
+    #highestPr = -1  # that way even 0 prob strings will give a result
+    #bestMotif = None
+    #for i in range(len(Text) - k + 1):
+    #    Motif = Text[i: i + k]
+    #    if Pr(Motif, Profile) > highestPr:
+    #        highestPr = Pr(Motif, Profile)
+    #        bestMotif = Motif
+    #return bestMotif
+
+    
+
+# Profile = {
+#     'A': [0.2, 0.2, 0.3, 0.2, 0.3],
+#     'C': [0.4, 0.3, 0.1, 0.5, 0.1],
+#     'G': [0.3, 0.3, 0.5, 0.2, 0.4],
+#     'T': [0.1, 0.2, 0.1, 0.1, 0.2]
+# }
+# Text = 'ACCTGTTTATTGCCTAAGTTCCGAACAAACCCAATATAGCCCGAGGGCCT'
+# k = 5
+# print(ProfileMostProbablePattern(Text, k, Profile))

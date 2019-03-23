@@ -1,0 +1,10 @@
+def RepeatedRandomizedMotifSearch(Dna, k, t, N):
+    BestScore = float('inf')
+    BestMotifs = []
+    for i in range(N):
+        Motifs = RandomizedMotifSearch(Dna, k, t)
+        CurrScore = Score(Motifs)
+        if CurrScore < BestScore:
+            BestScore = CurrScore
+            BestMotifs = Motifs
+    return BestMotifs

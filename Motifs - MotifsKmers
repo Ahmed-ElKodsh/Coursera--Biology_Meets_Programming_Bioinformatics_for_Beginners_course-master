@@ -1,0 +1,8 @@
+def MotifsKmers(Profile, Dna):
+    """takes a profile matrix Profile corresponding to a list of strings Dna as input
+    and returns a list of the Profile-most probable k-mers in each string from Dna. """
+    Motif = []
+    k = len(Profile['A'])
+    for i in range(len(Dna)):
+        Motif.append(ProfileMostProbablePattern(Dna[i], k, Profile))
+    return Motif

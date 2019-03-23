@@ -1,0 +1,32 @@
+def WeightedDie(Probabilities):
+    """create a list of tuples, where each element in the list stores (lower bound, upper bound, k-mer). Then, you could randomly pick a number 
+    between 0 and 1 and iterate through this list until you find the correct range, then return the corresponding k﻿-mer"""
+    choice = random.uniform(0, 1)
+    pr = 0
+    for i in Probabilities:
+        pr += Probabilities[i]      # range 0 through 0 + 0.2 = 0.2 to 'AA', 0.2 through 0.2 + 0.3 = 0.5 to 'AC', 0.5 through 0.5 + 0.1 = 0.6 to 'TT', and 0.6 through 0.6 + 0.4 = 1 to 'GG'.
+        if choice < pr:
+            return i
+
+    # lstTup = []
+    # lower = 0
+    # for k in Probabilities:
+    #     upper = lower + Probabilities[k]
+    #     lstTup.append((lower, upper, k))
+    #     lower = upper
+    #     upper += Probabilities[k]
+    #
+    # print(lstTup)
+    # p = random.uniform(0, 1)
+    # # print(p)
+    # kmer = ''
+    # for i in range(len(lstTup)):
+    #     low = lstTup[i][0]
+    #     up = lstTup[i][1]
+    #     if up >= p >= low:
+    #         kmer = lstTup[i][2]
+    #     else:
+    #         continue
+    # return kmer
+    
+# print(WeightedDie({'AA': 0.2, 'TT': 0.2, 'CC': 0.1, 'GG': 0.1, 'AT':0.4}))
